@@ -168,6 +168,32 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => heart.remove(), 4000);
     }
 
+    // Love Counter Logic
+    const loveCountDisplay = document.getElementById('love-count');
+    const loveBtn = document.getElementById('love-counter-btn');
+    let count = parseInt(localStorage.getItem('nwamaka_love_count')) || 0;
+    
+    loveCountDisplay.innerText = count;
+
+    loveBtn.addEventListener('click', () => {
+        count++;
+        localStorage.setItem('nwamaka_love_count', count);
+        loveCountDisplay.innerText = count;
+        
+        // Trigger small heart effect
+        createHeart();
+        
+        // Pulse effect
+        loveBtn.style.transform = 'scale(1.1)';
+        setTimeout(() => loveBtn.style.transform = '', 100);
+    });
+
+    // WhatsApp Sharing
+    document.getElementById('share-whatsapp').addEventListener('click', () => {
+        const text = encodeURIComponent("Hey Nwamaka! I made a special birthday card for you. Check it out here: https://birthday-six-delta-10.vercel.app/");
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    });
+
     // Audio Logic
     let isPlaying = false;
     const audioBtn = document.getElementById('play-vibe');
