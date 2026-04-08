@@ -5,6 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('bg-music');
     
     document.body.classList.add('locked');
+    enterBtn.disabled = true;
+    enterBtn.innerText = 'Preparing the Vibe... ⏳';
+
+    audio.addEventListener('canplaythrough', () => {
+        enterBtn.disabled = false;
+        enterBtn.innerText = 'Click to Enter with Music';
+    });
+
+    // Fallback if audio fails to load or takes too long
+    setTimeout(() => {
+        enterBtn.disabled = false;
+        if (enterBtn.innerText.includes('⏳')) {
+            enterBtn.innerText = 'Click to Enter';
+        }
+    }, 5000);
 
     enterBtn.addEventListener('click', () => {
         // Start Audio
