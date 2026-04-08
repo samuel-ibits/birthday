@@ -1,10 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial celebration
-    setTimeout(() => {
-        for (let i = 0; i < 40; i++) {
-            setTimeout(createSparkle, i * 60);
-        }
-    }, 1000);
+    const loader = document.getElementById('loader');
+    const enterBtn = document.getElementById('enter-btn');
+    const appContent = document.getElementById('app-content');
+    const audio = document.getElementById('bg-music');
+    
+    document.body.classList.add('locked');
+
+    enterBtn.addEventListener('click', () => {
+        // Start Audio
+        audio.play().catch(e => console.log("Playback failed:", e));
+        isPlaying = true;
+        updateAudioUI();
+
+        // Trigger Transitions
+        loader.classList.add('loader-exit');
+        appContent.classList.add('show-content');
+        document.body.classList.remove('locked');
+
+        // Initial celebration
+        setTimeout(() => {
+            for (let i = 0; i < 40; i++) {
+                setTimeout(createSparkle, i * 60);
+            }
+        }, 800);
+    });
 
     // Scroll Reveal Intersection Observer
     const observerOptions = {
@@ -136,24 +155,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Audio Logic
     let isPlaying = false;
-    const audio = new Audio();
-    // Using a placeholder soft ambient sound URL if available, otherwise just handle the state
-    // In a real scenario, we'd have an asset. For now, we'll simulate the toggle.
     const audioBtn = document.getElementById('play-vibe');
     const globalAudioToggle = document.getElementById('audio-toggle');
 
-    function toggleAudio() {
-        isPlaying = !isPlaying;
+    function updateAudioUI() {
         if (isPlaying) {
-            // audio.play(); // would play if we had a source
             globalAudioToggle.innerText = 'Sound: On';
             audioBtn.innerText = '🎵 Pause the Vibe';
         } else {
-            // audio.pause();
             globalAudioToggle.innerText = 'Sound: Off';
             audioBtn.innerText = '🎵 Play a Soft Vibe';
         }
     }
 
+    function toggleAudio() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            audio.play().catch(e => console.log("Playback failed:", e));
+            updateAudioUI();
+        } else {
+            audio.pause();
+            updateAudioUI();
+        }
+    }
+
+    audioBtn.addEventListener('click', toggleAudio);
     globalAudioToggle.addEventListener('click', toggleAudio);
 });
